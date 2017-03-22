@@ -3,14 +3,124 @@ exports.seed = function(knex, Promise) {
   .then(() => {
     return Promise.all([
       knex('users').insert({
-        id: 1,
         email: "kellykapowski@gmail.com",
         password: "bleep"
       }),
       knex('users').insert({
-        id: 2,
         email: "acslater@gmail.com",
         password: "bloop",
+      }),
+      knex('users').insert({
+        email: "jessiespano@gmail.com",
+        password: "blap",
+      }),
+      knex('users').insert({
+        email: "mrbelding@gmail.com",
+        password: "blurp",
+      }),
+      knex('users').insert({
+        email: "screech@gmail.com",
+        password: "schmeep",
+      }),
+      knex('users').insert({
+        email: "zackmorris@gmail.com",
+        password: "pleep",
+      }),
+      knex('users').insert({
+        email: "michelletanner@gmail.com",
+        password: "bleep"
+      }),
+      knex('users').insert({
+        email: "unclejesse@gmail.com",
+        password: "bloop",
+      }),
+      knex('users').insert({
+        email: "unclejoey@gmail.com",
+        password: "blap",
+      }),
+      knex('users').insert({
+        email: "stephanietanner@gmail.com",
+        password: "blurp",
+      }),
+      knex('users').insert({
+        email: "djtanner@gmail.com",
+        password: "schmeep",
+      }),
+      knex('users').insert({
+        email: "zackmorris@gmail.com",
+        password: "pleep",
+      }),
+      knex('users').insert({
+        email: "becky@gmail.com",
+        password: "bleep"
+      }),
+      knex('users').insert({
+        email: "dannytanner@gmail.com",
+        password: "bloop",
+      }),
+      knex('users').insert({
+        email: "kimmygibler@gmail.com",
+        password: "blap",
+      }),
+      knex('users').insert({
+        email: "carltonbanks@gmail.com",
+        password: "blurp",
+      }),
+      knex('users').insert({
+        email: "ashleybanks@gmail.com",
+        password: "schmeep",
+      }),
+      knex('users').insert({
+        email: "philipbanks@gmail.com",
+        password: "pleep",
+      }),
+      knex('users').insert({
+        email: "hillarybanksi@gmail.com",
+        password: "bleep"
+      }),
+      knex('users').insert({
+        email: "butlerjeffrey@gmail.com",
+        password: "bloop",
+      }),
+      knex('users').insert({
+        email: "jazz@gmail.com",
+        password: "blap",
+      }),
+      knex('users').insert({
+        email: "cliffhuxtable@gmail.com",
+        password: "blurp",
+      }),
+      knex('users').insert({
+        email: "vanessahuxtable@gmail.com",
+        password: "schmeep",
+      }),
+      knex('users').insert({
+        email: "clairhuxtable@gmail.com",
+        password: "pleep",
+      }),
+      knex('users').insert({
+        email: "rudyhuxtable@gmail.com",
+        password: "bleep"
+      }),
+      knex('users').insert({
+        email: "theohuxtable@gmail.com",
+        password: "bloop",
+      }),
+      knex('users').insert({
+        email: "elvintibideaux@gmail.com",
+        password: "blap",
+      }),
+      knex('users').insert({
+        email: "kenny@gmail.com",
+        password: "blurp",
+      }),
+      knex('users').insert({
+        email: "charmainebrown@gmail.com",
+        password: "schmeep",
+      }),
+      knex('users').insert({
+        email: "cockroach@gmail.com",
+        password: "pleep",
       })
     ]);
   });
