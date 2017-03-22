@@ -1,16 +1,18 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const fs = require('fs')
+
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
 app.set('port', process.env.PORT || 3000)
-app.locals.title = 'Shut Up & Dance'
-app.locals.secrets = {
-  wowowow: 'I am a banana'
-}
 
 app.get('/', (request, response) => {
   fs.readFile(`${__dirname}/index.html`, (err, file) => {
@@ -18,16 +20,30 @@ app.get('/', (request, response) => {
   })
 })
 
-app.get('/', (request, response) => {
-  response.send('Hello World!')
+app.get('/api/v1/users', (request, response) => {
+  database('users').select()
+  .then((users) => {
+    response.status(200).json(users)
+  })
+  .catch((error) => {
+  console.error('error getting users:', error)
+  })
 })
 
-app.get('/api/secrets', (request, response) => {
-  const secrets = app.locals.secrets
-
-  response.json({ secrets })
+app.post('/api/v1/users', (request, response) => {
+  const { email, password, id } = request.body
+  const user = { email, password, id };
+  database('users').insert(user)
+  .then(function() {
+    database('users').select()
+            .then(function(users) {
+              response.status(200).json(users);
+            })
+            .catch(function(error) {
+              console.error('error posting users:', error)
+            });
+  })
 })
-
 
 app.get('/api/secrets/:id', (request, response) => {
   const { id } = request.params
