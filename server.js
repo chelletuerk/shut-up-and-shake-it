@@ -22,26 +22,28 @@ app.get('/', (request, response) => {
 
 app.get('/api/v1/users', (request, response) => {
   database('users').select()
-  .then((users) => {
-    response.status(200).json(users)
-  })
-  .catch((error) => {
-  console.error('error getting users:', error)
-  })
+    .then((users) => {
+      response.status(200).json(users)
+    })
+    .catch((error) => {
+      response.status(404).json({success: 'false'})
+    })
 })
 
 app.post('/api/v1/users', (request, response) => {
-  const { email, password, id } = request.body
-  const user = { email, password, id };
+  const { email, password } = request.body
+  const user = { email, password }
   database('users').insert(user)
   .then(function() {
     database('users').select()
-            .then(function(users) {
-              response.status(200).json(users);
-            })
-            .catch(function(error) {
-              console.error('error posting users:', error)
-            });
+      .then(function(users) {
+        // RESTful requires a 201 on a new resource being created
+        response.status(201).json({success: 'true'})
+      })
+      .catch(function(error) {
+        // Spec says 422 this will match RESTful principles as the 201 does
+        response.status(422).json({success: 'false'})
+      });
   })
 })
 
@@ -49,7 +51,7 @@ app.get('/api/secrets/:id', (request, response) => {
   const { id } = request.params
   const message = app.locals.secrets[id]
 
-  if (!message) { return response.sendStatus(404)  }
+  if (!message) return response.sendStatus(404)
 
   response.json({ id, message })
 })
