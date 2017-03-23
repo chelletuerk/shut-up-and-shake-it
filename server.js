@@ -26,7 +26,7 @@ app.get('/api/v1/users', (request, response) => {
     response.status(200).json(users)
   })
   .catch((error) => {
-    response.status(404).json({success: 'false'})
+    response.status(404).json({'Response 404': 'Not Found'})
   })
 })
 
@@ -36,7 +36,7 @@ app.get('/api/v1/comments', (request, response) => {
     response.status(200).json(comments)
   })
   .catch((error) => {
-    response.status(404).json({success: 'false'})
+    response.status(404).json({'Response 404': 'Not Found'})
   })
 })
 
@@ -46,7 +46,7 @@ app.get('/api/v1/favorites', (request, response) => {
     response.status(200).json(favorites)
   })
   .catch((error) => {
-    response.status(404).json({success: 'false'})
+    response.status(404).json({'Response 404': 'Not Found'})
   })
 })
 
@@ -60,7 +60,7 @@ app.post('/api/v1/users', (request, response) => {
         response.status(201).json(users)
       })
       .catch(function(error) {
-        response.status(422).json({success: 'false'})
+        response.status(422).json({'Response 422': 'Unprocessable Entity'})
       });
   })
 })
@@ -72,10 +72,10 @@ app.post('/api/v1/comments', (request, response) => {
   .then(function() {
     database('comments').select()
       .then(function(comments) {
-        response.status(201).json({success: 'true'})
+        response.status(201).json(comments)
       })
       .catch(function(error) {
-        response.status(422).json({success: 'false'})
+        response.status(422).json({'Response 422': 'Unprocessable Entity'})
       });
   })
 })
@@ -87,10 +87,10 @@ app.post('/api/v1/favorites', (request, response) => {
   .then(function() {
     database('favorites').select()
       .then(function(comments) {
-        response.status(201).json({success: 'true'})
+        response.status(201).json(favorites)
       })
       .catch(function(error) {
-        response.status(422).json({success: 'false'})
+        response.status(422).json({'Response 422': 'Unprocessable Entity'})
       });
   })
 })
@@ -110,10 +110,10 @@ app.post('/api/v1/comments/:userId/:venueId', (request, response) => {
   .then(()=> {
     database('comments').where('userId', userId).select()
     .then(function(comments) {
-      response.status(201).json({success: 'true'})
+      response.status(201).json(comments)
     })
     .catch(function(error) {
-      response.status(422).json({success: 'false'})
+      response.status(422).json({'Response 422': 'Unprocessable Entity'})
     });
   })
 })
@@ -124,10 +124,10 @@ app.delete('/api/v1/users/:id', (request, response)=> {
     .then((comment)=> {
       database('users').where('id', id).select().del()
       .then(function(favorites) {
-        response.status(201).json({success: 'true'})
+        response.status(200).json({'Response 200': 'OK'})
       })
       .catch(function(error) {
-        response.status(422).json({success: 'false'})
+        response.status(422).json({'Response 422': 'Unprocessable Entity'})
       })
   })
 })
@@ -138,10 +138,10 @@ app.delete('/api/v1/comments/:id', (request, response)=> {
     .then((comment)=> {
       database('comments').where('id', id).select().del()
       .then(function(comments) {
-        response.status(201).json({success: 'true'})
+        response.status(200).json({'Response 200': 'OK'})
       })
       .catch(function(error) {
-        response.status(422).json({success: 'false'})
+        response.status(422).json({'Response 422': 'Unprocessable Entity'})
       })
     })
 })
@@ -152,10 +152,10 @@ app.delete('/api/v1/favorites/:id', (request, response)=> {
     .then((comment)=> {
       database('favorites').where('id', id).select().del()
       .then(function(favorites) {
-        response.status(201).json({success: 'true'})
+        response.status(200).json(favorites)
       })
       .catch(function(error) {
-        response.status(422).json({success: 'false'})
+        response.status(422).json({'Response 422': 'Unprocessable Entity'})
       })
   })
 })
@@ -216,3 +216,5 @@ app.delete('/api/v1/favorites/:id', (request, response)=> {
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)
 })
+
+module.exports = app;
