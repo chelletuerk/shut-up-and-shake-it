@@ -54,6 +54,17 @@ describe('GET /api/v1/users', () => {
   });
 });
 
+describe('GET /api/v1/users', () => {  //SAD PATH
+  it('should not respond back with all users', (done) => {
+    chai.request(server)
+    .get('/api/v1/userss')
+    .end((err, res) => {
+      expect(res).to.have.status(404);
+      done();
+    });
+  });
+});
+
 describe('GET /api/v1/comments', () => {
   it('should respond back with all comments', (done) => {
     chai.request(server)

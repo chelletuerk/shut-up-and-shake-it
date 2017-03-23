@@ -159,58 +159,35 @@ app.delete('/api/v1/favorites/:id', (request, response)=> {
   })
 })
 
-// app.patch('/api/users/:id', (request, response)=> {
-//   const { id } = request.params
-//   database('users').where('id', id).select()
-//     .then((user)=> {
-//       let email = request.body.email
-//       database('users').where('id', id).select().update({ email })
-//         .then((users)=> {
-//           response.status(200).json(users)
-//         })
-//     })
-//     .catch((error)=> {
-//       console.log(error)
-//     })
-// })
+app.patch('/api/users/:id', (request, response)=> {
+  const { id } = request.params
+  database('users').where('id', id).select()
+    .then((user)=> {
+      let email = request.body.email
+      database('users').where('id', id).select().update({ email })
+        .then((users)=> {
+          response.status(200).json(users)
+        })
+    })
+    .catch((error)=> {
+      console.log(error)
+    })
+})
 
-// app.patch('/api/comments/:id', (request, response)=> {
-//   const { id } = request.params
-//   const { body } = request.body
-//   database('comments').where('id', id).select()
-//     .then((comment)=> {
-//       database('comments').where('id', id).select().update({ body })
-//       .then(function(comments) {
-//         response.status(201).json({success: 'true'})
-//       })
-//       .catch(function(error) {
-//         response.status(422).json({success: 'false'})
-//       })
-//   })
-// })
-
-// app.patch('/api/comments/:id', (request, response)=> {
-//   const { id } = request.params
-//   database('comments').where('id', id).select()
-//     .then((comments)=> {
-//       const body = request.body.body
-//       database('comments').where('id', id).select().update({ body })
-//         .then((comments)=> {
-//           response.status(200).json(comments)
-//         })
-//     })
-//     .catch((error)=> {
-//       console.log(error)
-//     })
-// })
-
-
-
-
-
-
-
-
+app.patch('/api/v1/comments/:id', (request, response)=> {
+  const { id } = request.params
+  const { body } = request.body
+  database('comments').where('id', id).select()
+    .then((comment)=> {
+      database('comments').where('id', id).select().update({ body })
+      .then(function(comments) {
+        response.status(201).json({success: 'true'})
+      })
+      .catch(function(error) {
+        response.status(422).json({success: 'false'})
+      })
+  })
+})
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)
