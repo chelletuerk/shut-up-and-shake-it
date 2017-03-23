@@ -57,7 +57,7 @@ app.post('/api/v1/users', (request, response) => {
   .then(function() {
     database('users').select()
       .then(function(users) {
-        response.status(201).json({success: 'true'})
+        response.status(201).json(users)
       })
       .catch(function(error) {
         response.status(422).json({success: 'false'})
