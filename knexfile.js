@@ -25,12 +25,12 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL + `?ssl=true`,
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: './db/migrations'
     },
     seeds: {
-      directory: '../db/seeds/production'
+      directory: './db/seeds/production'
     },
     useNullAsDefault: true
   }
