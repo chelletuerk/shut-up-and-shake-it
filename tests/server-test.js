@@ -2,6 +2,8 @@ const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
 const server = require('../server.js');
+const configuration = require('../knexfile')['test'];
+const database = require('knex')(configuration);
 
 chai.use(chaiHttp);
 
@@ -10,6 +12,14 @@ describe('Server', () => {
   it('should exist', () => {
     expect(server).to.exist;
   });
+});
+
+beforeEach(function(done){
+  database('users').raw('truncate users;');
+  database('users').truncate();
+  database('favorites').truncate();
+  database('comments').truncate();
+  done();
 });
 
 
