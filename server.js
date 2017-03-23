@@ -37,23 +37,113 @@ app.post('/api/v1/users', (request, response) => {
   .then(function() {
     database('users').select()
       .then(function(users) {
-        // RESTful requires a 201 on a new resource being created
         response.status(201).json({success: 'true'})
       })
       .catch(function(error) {
-        // Spec says 422 this will match RESTful principles as the 201 does
         response.status(422).json({success: 'false'})
       });
   })
 })
 
-app.get('/api/secrets/:id', (request, response) => {
+app.get('/api/v1/comments', (request, response) => {
+  database('comments').select()
+  .then((comments) => {
+    response.status(200).json(comments)
+  })
+  .catch((error) => {
+    response.status(404).json({success: 'false'})
+  })
+})
+
+app.post('/api/v1/comments', (request, response) => {
+  const { body, songKickVenueId, userId } = request.body
+  const comment = { body, songKickVenueId, userId }
+  database('comments').insert(comment)
+  .then(function() {
+    database('comments').select()
+      .then(function(comments) {
+        response.status(201).json({success: 'true'})
+      })
+      .catch(function(error) {
+        response.status(422).json({success: 'false'})
+      });
+  })
+})
+
+app.delete('/api/v1/comments/:id', (request, response)=> {
   const { id } = request.params
-  const message = app.locals.secrets[id]
+  database('comments').where('id', id).select()
+    .then((comment)=> {
+      database('comments').where('id', id).select().del()
+      .then(function(comments) {
+        response.status(201).json({success: 'true'})
+      })
+      .catch(function(error) {
+        response.status(422).json({success: 'false'})
+      })
+    })
+})
 
-  if (!message) { return response.sendStatus(404)  }
+app.get('/api/v1/favorites', (request, response) => {
+  database('favorites').select()
+  .then((favorites) => {
+    response.status(200).json(favorites)
+  })
+  .catch((error) => {
+    response.status(404).json({success: 'false'})
+  })
+})
 
-  response.json({ id, message })
+app.post('/api/v1/favorites', (request, response) => {
+  const { rating, songKickVenueId, userId } = request.body
+  const comment = { rating, songKickVenueId, userId }
+  database('favorites').insert(comment)
+  .then(function() {
+    database('favorites').select()
+      .then(function(comments) {
+        response.status(201).json({success: 'true'})
+      })
+      .catch(function(error) {
+        response.status(422).json({success: 'false'})
+      });
+  })
+})
+
+app.delete('/api/v1/favorites/:id', (request, response)=> {
+  const { id } = request.params
+  database('favorites').where('id', id).select()
+    .then((comment)=> {
+      database('favorites').where('id', id).select().del()
+      .then(function(favorites) {
+        response.status(201).json({success: 'true'})
+      })
+      .catch(function(error) {
+        response.status(422).json({success: 'false'})
+      })
+  })
+})
+
+app.post('/api/v1/comments/:userId/:venueId', (request, response) => {
+  const { userId, venueId } = request.params
+  const { body, songKickVenueId } = request.body
+  const newComment = {
+    body,
+    userId,
+    songKickVenueId:venueId,
+    created_at: new Date,
+    updated_at: new Date,
+  }
+
+  database('comments').insert(newComment)
+  .then(()=> {
+    database('comments').where('userId', userId).select()
+    .then(function(comments) {
+      response.status(201).json({success: 'true'})
+    })
+    .catch(function(error) {
+      response.status(422).json({success: 'false'})
+    });
+  })
 })
 
 app.listen(app.get('port'), () => {
