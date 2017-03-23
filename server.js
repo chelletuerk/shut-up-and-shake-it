@@ -41,7 +41,8 @@ app.get('/api/v1/comments', (request, response) => {
 })
 
 app.get('/api/v1/favorites', (request, response) => {
-  database('favorites').select()
+  const { userId } = request.query
+  database('favorites').where('userId', userId).select()
   .then((favorites) => {
     response.status(200).json(favorites)
   })
@@ -120,16 +121,14 @@ app.post('/api/v1/comments/:userId/:venueId', (request, response) => {
 
 app.delete('/api/v1/users/:id', (request, response)=> {
   const { id } = request.params
-  database('users').where('id', id).select()
-    .then((comment)=> {
-      database('users').where('id', id).select().del()
-      .then(function(favorites) {
-        response.status(200).json({'Response 200': 'OK'})
-      })
-      .catch(function(error) {
+    database('users').where('id', id).select().del()
+    .then(function(count) {
+      if ( count === 0) {
         response.status(422).json({'Response 422': 'Unprocessable Entity'})
-      })
-  })
+      } else {
+        response.status(200).json({'Response 200': 'OK' })
+      }
+    })
 })
 
 app.delete('/api/v1/comments/:id', (request, response)=> {
