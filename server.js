@@ -8,6 +8,8 @@ const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
 
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
@@ -104,11 +106,11 @@ app.post('/api/v1/comments', (request, response) => {
 
 app.post('/api/v1/favorites', (request, response) => {
   const { rating, songKickVenueId, userId } = request.body
-  const comment = { rating, songKickVenueId, userId }
-  database('favorites').insert(comment)
+  const favorite = { rating, songKickVenueId, userId }
+  database('favorites').insert(favorite)
   .then(function() {
     database('favorites').select()
-      .then(function(comments) {
+      .then(function(favorites) {
         response.status(201).json(favorites)
       })
       .catch(function(error) {

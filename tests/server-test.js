@@ -155,21 +155,22 @@ describe('GET /api/v1/accessTokens', () => {
 });
 
 describe('POST /api/v1/users', function() {
-  it('should create a new user', function(done) {
-    let user = {userName:'user fun'}
-    chai.request(server)
-    .post('/api/v1/users')
-    .send(user)
-    .end((err, res) => {
-    expect(res).to.have.status(201);
-    expect(res).to.be.json;
-    expect(res.body).to.be.a('array');
-    done();
+    it('should create a new user', function(done) {
+      let user = {userName:'user fun'}
+      chai.request(server)
+      .post('/api/v1/users')
+      .send(user)
+      .end((err, res) => {
+      expect(res).to.have.status(201);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('array');
+      done();
+    });
   });
 });
 
  //SAD PATH
- describe('POST /api/v1/users', function() {
+describe('POST /api/v1/users', function() {
      it('should respond with a 404', function(done) {
        let user = {userName:'user fun'}
        chai.request(server)
@@ -180,22 +181,23 @@ describe('POST /api/v1/users', function() {
        expect(res.body).to.be.a('object');
        done();
      });
-   });
- });
-
-
-  it('should create a new comment', function(done) {
-    let comment = {comment:'comment fun'}
-    chai.request(server)
-    .post('/api/v1/comments')
-    .send(comment)
-    .end((err, res) => {
-    expect(res).to.have.status(201);
-    expect(res).to.be.application;
-    expect(res.body).to.be.a('array');
-    done();
-    });
   });
+});
+
+
+describe('POST /api/v1/comments', function() {
+      it('should create a new comment', function(done) {
+        let comment = {commentName:'comment fun'}
+        chai.request(server)
+        .post('/api/v1/comments')
+        .send(comment)
+        .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('array');
+        done();
+      });
+   });
 });
 
 //SAD PATH
@@ -213,17 +215,89 @@ describe('POST /api/v1/users', function() {
    });
  });
 
- describe('POST /api/v1/favorites', function() {
-     it('should respond with a 422', function(done) {
-       let user = {fave:'user fave'}
+describe('POST /api/v1/favorites', function() {
+    it('should create a new favorite', function(done) {
+      let favorite = {favoriteName:'favorite fun'}
+      chai.request(server)
+      .post('/api/v1/favorites')
+      .send(favorite)
+      .end((err, res) => {
+      expect(res).to.have.status(201);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('array');
+      done();
+    });
+  });
+});
+
+//SAD PATH
+describe('POST /api/v1/favorites', function() {
+    it('should respond with a 404', function(done) {
+      let user = {userName:'user fun'}
+      chai.request(server)
+      .post('/api/v1/favoritess')
+      .send(user)
+      .end((err, res) => {
+      expect(res).to.have.status(404);
+      expect(res.body).to.be.a('object');
+      done();
+    });
+  });
+});
+
+//SAD PATH
+ describe('POST /api/v1/accessTokens', function() {
+     it('should respond with a 404', function(done) {
+       let token = {token:'token fun'}
        chai.request(server)
-       .post('/api/v1/favorites')
-       .send(user)
+       .post('/api/v1/accessTokenss')
+       .send(token)
        .end((err, res) => {
-       expect(res).to.have.status(422);
-       expect(res).to.be.json;
+       expect(res).to.have.status(404);
        expect(res.body).to.be.a('object');
        done();
      });
    });
  });
+
+//SAD PATH
+describe('DELETE /api/v1/users/:id', function() {
+  it('should return a 422 if user is not found', function(done) {
+    chai.request(server)
+    .delete('/api/v1/users/1')
+    .end(function(err, res) {
+      expect(res).to.have.status(422);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('object');
+      done();
+      });
+    });
+});
+
+//SAD PATH
+describe('DELETE /api/v1/comments/:id', function() {
+  it('should return a 422 if comment is not found', function(done) {
+    chai.request(server)
+    .delete('/api/v1/comments/1')
+    .end(function(err, res) {
+      expect(res).to.have.status(422);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('object');
+      done();
+      });
+    });
+});
+
+//SAD PATH
+describe('DELETE /api/v1/favorites/:id', function() {
+  it('should return a 422 if favorite is not found', function(done) {
+    chai.request(server)
+    .delete('/api/v1/favorites/1')
+    .end(function(err, res) {
+      expect(res).to.have.status(422);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('object');
+      done();
+      });
+    });
+});
