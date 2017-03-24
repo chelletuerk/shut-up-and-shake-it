@@ -178,13 +178,13 @@ app.delete('/api/v1/favorites/:id', (request, response)=> {
     })
 })
 
-app.patch('/api/users/:id', (request, response)=> {
+app.patch('/api/v1/users/:id', (request, response)=> {
   const { id } = request.params
+  const { email } = request.body
   database('users').where('id', id).select()
     .then((user)=> {
-      let email = request.body.email
       database('users').where('id', id).select().update({ email })
-      .then(function(comments) {
+      .then(function(users) {
         response.status(201).json({success: 'true'})
       })
       .catch(function(error) {
@@ -208,13 +208,13 @@ app.patch('/api/v1/comments/:id', (request, response)=> {
   })
 })
 
-app.patch('/api/favorites/:id', (request, response)=> {
+app.patch('/api/v1/favorites/:id', (request, response)=> {
   const { id } = request.params
+  const { rating } = request.body
   database('favorites').where('id', id).select()
     .then((favorite)=> {
-      let email = request.body.email
-      database('favorites').where('id', id).select().update({ email })
-      .then(function(comments) {
+      database('favorites').where('id', id).select().update({ rating })
+      .then(function(favorites) {
         response.status(201).json({success: 'true'})
       })
       .catch(function(error) {
