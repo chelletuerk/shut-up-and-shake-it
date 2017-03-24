@@ -7,7 +7,6 @@ const database = require('knex')(configuration);
 
 chai.use(chaiHttp);
 
-// describe('API Routes', function() {
 describe('Server', () => {
   it('should exist', () => {
     expect(server).to.exist;
@@ -15,7 +14,6 @@ describe('Server', () => {
 });
 
 beforeEach(function(done){
-  database('users').raw('truncate users;');
   database('users').truncate();
   database('favorites').truncate();
   database('comments').truncate();
@@ -36,20 +34,19 @@ describe('GET /', () => {
   });
 });
 
+ //SAD PATH
+describe('GET /', () => {
+  it('should respond back with a 404 error', (done) => {
+    chai.request(server)
+    .get('/ /')
+    .end((err, res) => {
+      expect(res).to.have.status(404);
+      done();
+    });
+  });
+});
+
 describe('GET /api/v1/users', () => {
-  beforeEach(function(done){
-      const users = [{name: 'user1', id: 1},
-                      {name: 'user2', id: 2}];
-      server.locals.users = users;
-      done();
-    });
-
-    afterEach(function(done){
-      server.locals.users = [];
-      done();
-    });
-
-
   it('should respond back with all users', (done) => {
     chai.request(server)
     .get('/api/v1/users')
@@ -58,14 +55,15 @@ describe('GET /api/v1/users', () => {
       expect(res).to.have.status(200);
       expect(res).to.be.json;
       expect(res.body).to.be.a('array');
-      expect(res.body).to.have.length(32);
+      expect(res.body).to.have.length(9);
       done();
     });
   });
 });
 
-describe('GET /api/v1/users', () => {  //SAD PATH
-  it('should not respond back with all users', (done) => {
+ //SAD PATH
+describe('GET /api/v1/users', () => {
+  it('should respond back with a 404 error', (done) => {
     chai.request(server)
     .get('/api/v1/userss')
     .end((err, res) => {
@@ -84,25 +82,79 @@ describe('GET /api/v1/comments', () => {
       expect(res).to.have.status(200);
       expect(res).to.be.json;
       expect(res.body).to.be.a('array');
-      expect(res.body).to.have.length(32);
+      expect(res.body).to.have.length(5);
+      done();
+    });
+  });
+});
+
+//SAD PATH
+describe('GET /api/v1/comments', () => {
+  it('should respond back with a 404 error', (done) => {
+    chai.request(server)
+    .get('/api/v1/commentss')
+    .end((err, res) => {
+      expect(res).to.have.status(404);
+      done();
+    });
+  });
+});
+
+describe('GET /api/v1/favorites', () => {
+  it('should respond back with all favorites', (done) => {
+    chai.request(server)
+    .get('/api/v1/favorites')
+    .end((err, res) => {
+      if(err) {done(err) }
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('array');
+      expect(res.body).to.have.length(9);
+      done();
+    });
+  });
+});
+
+//SAD PATH
+describe('GET /api/v1/favorites', () => {
+  it('should respond back with a 404 error', (done) => {
+    chai.request(server)
+    .get('/api/v1/favoritess')
+    .end((err, res) => {
+      expect(res).to.have.status(404);
+      done();
+    });
+  });
+});
+
+describe('GET /api/v1/accessTokens', () => {
+  it('should respond back with all accessTokens', (done) => {
+    chai.request(server)
+    .get('/api/v1/accessTokens')
+    .end((err, res) => {
+      if(err) {done(err) }
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('array');
+      expect(res.body).to.have.length(9);
+      done();
+    });
+  });
+});
+
+ //SAD PATH
+describe('GET /api/v1/accessTokens', () => {
+  it('should respond back with a 404 error', (done) => {
+    chai.request(server)
+    .get('/api/v1/accessTokenss')
+    .end((err, res) => {
+      expect(res).to.have.status(404);
       done();
     });
   });
 });
 
 describe('POST /api/v1/users', function() {
-    beforeEach(function(done){
-        const folders = [{name: 'comment1', id: 1},
-                        {name: 'comment2', id: 2}];
-        server.locals.folders = folders;
-        done();
-      });
-
-      afterEach(function(done){
-        server.locals.folders = [];
-        done();
-      });
-
   it('should create a new user', function(done) {
     let user = {userName:'user fun'}
     chai.request(server)
@@ -113,33 +165,65 @@ describe('POST /api/v1/users', function() {
     expect(res).to.be.json;
     expect(res.body).to.be.a('array');
     done();
-    });
   });
 });
 
-describe('POST /api/v1/comments', function() {
-    beforeEach(function(done){
-        const comments = [{name: 'user1', id: 1},
-                        {name: 'user2', id: 2}];
-        server.locals.comments = comments;
-        done();
-      });
+ //SAD PATH
+ describe('POST /api/v1/users', function() {
+     it('should respond with a 404', function(done) {
+       let user = {userName:'user fun'}
+       chai.request(server)
+       .post('/api/v1/userss')
+       .send(user)
+       .end((err, res) => {
+       expect(res).to.have.status(404);
+       expect(res.body).to.be.a('object');
+       done();
+     });
+   });
+ });
 
-      afterEach(function(done){
-        server.locals.comments = [];
-        done();
-      });
 
-  it('should create a new user', function(done) {
-    let user = {userName:'user fun'}
+  it('should create a new comment', function(done) {
+    let comment = {comment:'comment fun'}
     chai.request(server)
     .post('/api/v1/comments')
-    .send(user)
+    .send(comment)
     .end((err, res) => {
     expect(res).to.have.status(201);
     expect(res).to.be.application;
-    expect(res.body).to.be.a('object');
+    expect(res.body).to.be.a('array');
     done();
     });
   });
 });
+
+//SAD PATH
+ describe('POST /api/v1/comments', function() {
+     it('should respond with a 404', function(done) {
+       let user = {userName:'user fun'}
+       chai.request(server)
+       .post('/api/v1/commentss')
+       .send(user)
+       .end((err, res) => {
+       expect(res).to.have.status(404);
+       expect(res.body).to.be.a('object');
+       done();
+     });
+   });
+ });
+
+ describe('POST /api/v1/favorites', function() {
+     it('should respond with a 422', function(done) {
+       let user = {fave:'user fave'}
+       chai.request(server)
+       .post('/api/v1/favorites')
+       .send(user)
+       .end((err, res) => {
+       expect(res).to.have.status(422);
+       expect(res).to.be.json;
+       expect(res.body).to.be.a('object');
+       done();
+     });
+   });
+ });

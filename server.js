@@ -40,6 +40,16 @@ app.get('/api/v1/comments', (request, response) => {
   })
 })
 
+app.get('/api/v1/favorites', (request, response) => {
+  database('favorites').select()
+  .then((comments) => {
+    response.status(200).json(comments)
+  })
+  .catch((error) => {
+    response.status(404).json({'Response 404': 'Not Found'})
+  })
+})
+
 app.get('/api/v1/accessTokens', (request, response) => {
   database('accessTokens').select()
   .then((comments) => {
@@ -50,6 +60,7 @@ app.get('/api/v1/accessTokens', (request, response) => {
   })
 })
 
+//QUERY PARAM ?userId=5
 app.get('/api/v1/favorites', (request, response) => {
   const { userId } = request.query
   database('favorites').where('userId', userId).select()
@@ -133,7 +144,7 @@ app.delete('/api/v1/users/:id', (request, response)=> {
   const { id } = request.params
     database('users').where('id', id).select().del()
     .then(function(count) {
-      if ( count === 0) {
+      if (count === 0) {
         response.status(422).json({'Response 422': 'Unprocessable Entity'})
       } else {
         response.status(200).json({'Response 200': 'OK' })
@@ -143,30 +154,26 @@ app.delete('/api/v1/users/:id', (request, response)=> {
 
 app.delete('/api/v1/comments/:id', (request, response)=> {
   const { id } = request.params
-  database('comments').where('id', id).select()
-    .then((comment)=> {
-      database('comments').where('id', id).select().del()
-      .then(function(comments) {
-        response.status(200).json({'Response 200': 'OK'})
-      })
-      .catch(function(error) {
+    database('comments').where('id', id).select().del()
+    .then(function(count) {
+      if (count === 0) {
         response.status(422).json({'Response 422': 'Unprocessable Entity'})
-      })
+      } else {
+        response.status(200).json({'Response 200': 'OK' })
+      }
     })
 })
 
 app.delete('/api/v1/favorites/:id', (request, response)=> {
   const { id } = request.params
-  database('favorites').where('id', id).select()
-    .then((comment)=> {
-      database('favorites').where('id', id).select().del()
-      .then(function(favorites) {
-        response.status(200).json(favorites)
-      })
-      .catch(function(error) {
+    database('favorites').where('id', id).select().del()
+    .then(function(count) {
+      if (count === 0) {
         response.status(422).json({'Response 422': 'Unprocessable Entity'})
-      })
-  })
+      } else {
+        response.status(200).json({'Response 200': 'OK' })
+      }
+    })
 })
 
 app.patch('/api/users/:id', (request, response)=> {
@@ -175,13 +182,13 @@ app.patch('/api/users/:id', (request, response)=> {
     .then((user)=> {
       let email = request.body.email
       database('users').where('id', id).select().update({ email })
-        .then((users)=> {
-          response.status(200).json(users)
-        })
-    })
-    .catch((error)=> {
-      console.log(error)
-    })
+      .then(function(comments) {
+        response.status(201).json({success: 'true'})
+      })
+      .catch(function(error) {
+        response.status(422).json({success: 'false'})
+      })
+  })
 })
 
 app.patch('/api/v1/comments/:id', (request, response)=> {
@@ -190,6 +197,21 @@ app.patch('/api/v1/comments/:id', (request, response)=> {
   database('comments').where('id', id).select()
     .then((comment)=> {
       database('comments').where('id', id).select().update({ body })
+      .then(function(comments) {
+        response.status(201).json({success: 'true'})
+      })
+      .catch(function(error) {
+        response.status(422).json({success: 'false'})
+      })
+  })
+})
+
+app.patch('/api/favorites/:id', (request, response)=> {
+  const { id } = request.params
+  database('favorites').where('id', id).select()
+    .then((favorite)=> {
+      let email = request.body.email
+      database('favorites').where('id', id).select().update({ email })
       .then(function(comments) {
         response.status(201).json({success: 'true'})
       })
