@@ -1,6 +1,6 @@
 ## Brief Overview
 
-Build Your Own Backend is a node-express app connecting to a database through knex.  It is the basis for an upcoming music app frontend that will utilize the server built in this project.  The database consists of four main tables: Users, Comments, Favorites, and Access Tokens.  The users table has relationships with all three listed tables.  
+Build Your Own Backend is a node-express app connecting to a database through knex.  It is the basis for an upcoming music app that will utilize the server built in this project.  The database consists of four main tables: Users, Comments, Favorites, and Access Tokens.  The users table has relationships with all three listed tables.  
 
 You can find the production link (here)[https://byobackend.herokuapp.com/]
 
