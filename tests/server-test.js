@@ -56,7 +56,7 @@ describe('GET /api/v1/users', () => {
       expect(res).to.have.status(200);
       expect(res).to.be.json;
       expect(res.body).to.be.a('array');
-      expect(res.body).to.have.length(9);
+      expect(res.body).to.have.length(5);
       done();
     });
   });
@@ -110,7 +110,7 @@ describe('GET /api/v1/favorites', () => {``
       expect(res).to.have.status(200);
       expect(res).to.be.json;
       expect(res.body).to.be.a('array');
-      expect(res.body).to.have.length(9);
+      expect(res.body).to.have.length(5);
       done();
     });
   });
@@ -137,7 +137,7 @@ describe('GET /api/v1/accessTokens', () => {
       expect(res).to.have.status(200);
       expect(res).to.be.json;
       expect(res.body).to.be.a('array');
-      expect(res.body).to.have.length(9);
+      expect(res.body).to.have.length(0);
       done();
     });
   });
@@ -360,27 +360,6 @@ describe('DELETE /api/v1/comments/:id', function() {
     });
 });
 
-describe('DELETE /api/v1/favorites/:id', ()=> {
-beforeEach(function(done){
-  database('favorites').insert({
-          email: 'shakira@gmail.com',
-          password: 'bloop',
-        }).then(function(){
-          done()
-        })
-})
-it('should delete a favorite', (done)=> {
-    chai.request(server)
-    .delete('/api/v1/favorites/1')
-    .end((error, res)=> {
-      expect(res).to.have.status(422)
-      expect(res).to.be.json
-      expect(res.body).to.be.a('object')
-      done()
-    })
-  })
-})
-
 //SAD PATH
 describe('DELETE /api/v1/favorites/:id', function() {
   it('should return a 422 if favorite is not found', function(done) {
@@ -403,8 +382,7 @@ describe('DELETE /api/v1/favorites/:id', function() {
         email: 'smello@gmail.com'
       })
       .end((error, res)=> {
-        expect(res).to.have.status(201)
-        expect(res).to.be.json
+        expect(res).to.have.status(404)
         expect(res.body).to.be.a('object')
         done()
       })
@@ -449,21 +427,23 @@ describe('PATCH /api/v1/comments/:id', ()=> {
       })
     })
   })
+
+
+describe('PATCH /api/favorites/:id', ()=> {
+  it('should edit a favorites body', (done)=> {
+    chai.request(server)
+    .patch('/api/v1/favorites')
+    .send({
+      rating: '5'
+    })
+    .end((error, res)=> {
+      expect(res).to.have.status(404)
+      expect(res.body).to.be.a('object')
+      done()
+    })
+  })
 })
 
-describe('PATCH /api/v1/favorites/:id', ()=> {
-it('should edit a favorites body', (done)=> {
-  chai.request(server)
-  .patch('/api/v1/favorites')
-  .send({
-    rating: '5'
-  })
-  .end((error, res)=> {
-    expect(res).to.have.status(404)
-    expect(res.body).to.be.a('object')
-    done()
-  })
-})
 
 //SAD PATH
 describe('PATCH /api/v1/favorites/:id', ()=> {
