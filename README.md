@@ -4,7 +4,7 @@ Build Your Own Backend is a node-express app connecting to a database through kn
 
 You can find the production link [here](https://byobackend.herokuapp.com/)
 
-The RESTful endpoints are follows:
+The RESTful endpoints are as follows:
 
 ### Users
 
@@ -15,7 +15,7 @@ POST /api/v1/users
 * Subscribe as a new using providing an email and password
 
 DELETE /api/v1/users/:id
-* Delete a users
+* Delete a user
 
 PATCH /api/v1/users/:id
 * Modify an email address or password via the users' ID
@@ -44,7 +44,7 @@ GET /api/v1/favorites
 
 POST /api/v1/favorites
 * Post a 'favorited' venue
-* Add a query 'userId' query parameter to narrow down the 'favorited venue' by user
+* Add a 'userId' query parameter to narrow down the 'favorited venue' by user
 
 DELETE /api/v1/favorites/:id
 * Delete a 'favorited' venue providing a user ID
